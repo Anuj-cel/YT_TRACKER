@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Watch Time Tracker",
+  "version": "1.0",
+  "description": "Tracks YouTube watch time and sends it to the backend",
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://localhost:3000/*",
+    "https://www.youtube.com/*"
+  ],
+  "background": {
+    "scripts": ["background.js"]  ,
+    "type":"module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/watch*","https://www.youtube.com/shorts*"],
+      "js": ["content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/clock16.png",
+      "48": "icons/clock48.png",
+      "128": "icons/clock128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/clock16.png",
+    "48": "icons/clock48.png",
+    "128": "icons/clock128.png"
+  }
+}
