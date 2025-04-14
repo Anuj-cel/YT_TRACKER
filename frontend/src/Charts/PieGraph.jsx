@@ -1,43 +1,12 @@
-import "../App.css"
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
 import { useState, useEffect } from "react";
+import formatTime from "../utils/formatTime";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
 export const PieGraph = ({ categories }) => {
-  // const options = {};
-  const options = {
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem) => {
-            const value = tooltipItem.dataset.data[tooltipItem.dataIndex];
-            const time = formatTime(value); // format time in hours, minutes, and seconds
-            return `${tooltipItem.label}: ${time}`;
-          },
-        },
-      },
-    },
-  };
-  
-  function formatTime(seconds) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secondsRemaining = Math.round(seconds % 60); // round to nearest second
-  
-    let timeString = "";
-    if (hours > 0) {
-      timeString += `${hours}h `;
-    }
-    if (minutes > 0 || timeString !== "") {
-      timeString += `${minutes}m `;
-    }
-    if (secondsRemaining > 0 && timeString === "") {
-      timeString += `${secondsRemaining}s`;
-    }
-    return timeString.trim();
-  }
+  const [totalTime, setTotalTime] = useState(0);
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -48,9 +17,37 @@ export const PieGraph = ({ categories }) => {
     ],
   });
 
+  const options = {
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          color: "#374151", // Tailwind's gray-700
+          font: {
+            size: 14,
+            family: "Inter, sans-serif",
+          },
+          padding: 20,
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem) => {
+            const value = tooltipItem.dataset.data[tooltipItem.dataIndex];
+            const time = formatTime(value);
+            return `${tooltipItem.label}: ${time}`;
+          },
+        },
+      },
+    },
+  };
+
+ 
+
   useEffect(() => {
-    const labels = categories.map((category) => category.category);
-    const data = categories.map((category) => category.watchTime);
+    const labels = categories.map((cat) => cat.category);
+    const data = categories.map((cat) => cat.watchTime);
+    const total = data.reduce((sum, val) => sum + val, 0);
 
     setChartData({
       labels,
@@ -65,27 +62,27 @@ export const PieGraph = ({ categories }) => {
             "#FF4500",
             "#9C27B0",
             "#3F51B5",
-            "#FF0000"
+            "#FF0000",
           ],
         },
       ],
     });
+
+    setTotalTime(total);
   }, [categories]);
 
   return (
-    <>
-      <div className="div1">
-        <Pie options={options} data={chartData} />
-      </div>
-    </>
+    <div className="w-full">
+      <h3 className="text-center text-sm text-gray-500 mb-2">
+        Total:{" "}
+        <span className="text-blue-500 font-semibold">{formatTime(totalTime)}</span>
+      </h3>
+      <div className="flex justify-center">
+  <div className="max-w-sm w-full">
+    <Pie data={chartData} options={options} />
+  </div>
+</div>
+
+    </div>
   );
 };
-
-// In this updated code:
-
-//     We added the useEffect hook to update the chartData state when the categories prop changes.
-//     We mapped the categories array to extract the labels and data for the pie chart.
-//     We updated the chartData state with the new labels and data.
-//     We passed the updated chartData state to the Pie component.
-
-// This should render the pie chart with the data from the categories prop.

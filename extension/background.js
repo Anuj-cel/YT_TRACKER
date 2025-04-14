@@ -34,7 +34,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
            if (sender.tab.id === activeTabId) {
             activeTabId = null;
         }
-        console.log(`Watch time received: ${message.duration} sec (Shorts: ${message.isShorts})`);
+        console.log(`Watch time received: ${message.duration} sec (Shorts: ${message.isShorts}) StartTime ${message.startTime} EndTime ${message.endTime}`);
         console.log("This is tabId ", message.tabId);
         // Send data to backend
         fetch('http://localhost:3000/watchtime', {
@@ -46,6 +46,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 videoUrl: message.videoUrl || sender.tab.url,  // Ensure video URL is sent
                 duration: message.duration,
                 isShorts: message.isShorts,
+                realStartTime:message.realStartTime,
+                realEndTime:message.realEndTime,
+                // ads:message.ads
                 // videoId: getYouTubeVideoId(message.videoUrl||sender.tab.url)-->this was making reponse undefined   ------->lesson
             })
         })

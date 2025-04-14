@@ -8,7 +8,8 @@
     "activeTab",
     "storage",
     "scripting"
-  ],
+  ]
+,
   "host_permissions": [
     "http://localhost:3000/*",
     "https://www.youtube.com/*"

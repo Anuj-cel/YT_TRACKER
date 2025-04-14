@@ -4,7 +4,8 @@
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
-    "mongoose": "^8.13.1"
+    "mongoose": "^8.13.1",
+    "socket.io": "^4.8.1"
   },
   "name": "tracker",
   "version": "1.0.0",

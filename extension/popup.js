@@ -1,88 +1,7 @@
-// // // Event listener for when the extension is installed or updated
-// // chrome.runtime.onInstalled.addListener(() => {
-// //     // Call reinjection function when the extension is installed or updated
-// //     reinjectContentScript();
-// // });
 
-// // // Reinjection function to inject the content script into all active tabs
-// // function reinjectContentScript() {
-// //     // Query all open tabs to inject content script if necessary
-// //     chrome.tabs.query({}, function(tabs) {
-// //         tabs.forEach(tab => {
-// //             // Ensure we're injecting the content script into YouTube pages only
-// //             if (tab.url && tab.url.includes('youtube.com')) {
-// //                 chrome.scripting.executeScript({
-// //                     target: { tabId: tab.id },
-// //                     files: ['content.js'] // Make sure this path matches your content script
-// //                 }).then(() => {
-// //                     console.log(`Content script reinjected into tab: ${tab.url}`);
-// //                 }).catch((err) => {
-// //                     console.error('Error reinjecting content script:', err);
-// //                 });
-// //             }
-// //         });
-// //     });
-// // }
 
-// // // Listen for any message from the content script (or popup) and forward it
-// // chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-// //     console.log("Message received in background:", message);
-
-// //     // Handle specific messages and respond if necessary
-// //     if (message && message.action === 'sendWatchTime') {
-// //         // Handle watch time message and forward to backend or log it
-// //         console.log('Watch time received:', message.duration, 'Seconds');
-        
-// //         // Optionally send to your backend API (if required)
-// //         fetch('http://localhost:3000/watchtime', {
-// //             method: 'POST',
-// //             headers: {
-// //                 'Content-Type': 'application/json'
-// //             },
-// //             body: JSON.stringify({
-// //                 videoUrl: message.videoUrl,
-// //                 duration: message.duration,
-// //                 isShorts: message.isShorts
-// //             })
-// //         })
-// //         .then(response => response.json())
-// //         .then(data => {
-// //             console.log('Successfully sent watch time to backend:', data);
-// //         })
-// //         .catch(error => {
-// //             console.error('Error sending watch time to backend:', error);
-// //         });
-
-// //         sendResponse({ status: 'Watch time logged successfully' });
-// //     }
-// //     // Return true to indicate you will send a response asynchronously
-// //     return true;
-// // });
-// document.getElementById('track').addEventListener('click', function () {
-//     console.log('Track button clicked!');
-//     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-//         const currentTab = tabs[0];
-//         const currentUrl = currentTab.url;
-
-//         // Ensure the URL is a valid YouTube video URL
-//         if (currentUrl && currentUrl.includes('youtube.com/watch')) {
-//             console.log('Injecting content script...');
-//             chrome.scripting.executeScript({
-//                 target: { tabId: currentTab.id },
-//                 files: ['content.js']
-//             }).then(() => {
-//                 console.log('Content script injected successfully.');
-//             }).catch((error) => {
-//                 console.error('Error injecting content script:', error);
-//             });
-//         } else {
-//             alert('Please open a YouTube video to start tracking.');
-//         }
-//     });
-// });
 
 const POSSIBLE_PORTS = [5173, 3001, 5174, 5175, 3000]; 
-
 async function getReactPort() {
     for (const port of POSSIBLE_PORTS) {
         try {
@@ -139,16 +58,18 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
         .then(data => {
             console.log("This is data in popup 0 ",data);
-            totalTimeDisplay.textContent =formatTime(data.totalWatchTime);
-            watchTimeDisplay.textContent = formatTime(data.totalWatchTime-data.totalShorts);
-            shortsTimeDisplay.textContent = formatTime(data.totalShorts);
+            totalTimeDisplay.textContent =formatTime(data.totalWatchTime)||'0s';
+            watchTimeDisplay.textContent = formatTime(data.totalWatchTime-data.totalShorts)||'0s';
+            shortsTimeDisplay.textContent = formatTime(data.totalShorts)||"0s";
         })
         .catch(error => console.error("❌ Error fetching watch time:", error));
 });
 
 document.getElementById("dashboard-btn").addEventListener("click", () => {
+    console.log("Request for data is done ");
     chrome.tabs.create({ url: " http://localhost:5173/" }); // Change this URL later if deployed
 });
+
 
 
 
@@ -157,5 +78,3 @@ document.getElementById("dashboard-btn").addEventListener("click", () => {
 //     Backend servers (Express, Node.js, etc.) won’t serve manifest.json, but React/Vite will.
 
 //     It ensures only the React frontend is detected, avoiding confusion with backend servers.
-
-
