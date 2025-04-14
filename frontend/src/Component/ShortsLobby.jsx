@@ -10,7 +10,7 @@ function ShortsLobby({ shorts }) {
 
 
       <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
-        {shorts.map((short) => (
+        {shorts.slice().reverse().map((short) => (
           <a
             key={short.id}
             href={`https://www.youtube.com/watch?v=${short.videoId}`}
@@ -24,9 +24,9 @@ function ShortsLobby({ shorts }) {
                 alt={short.videoTitle}
                 className="w-full h-64 object-cover rounded-t-lg"
               />
-              <span className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-0.5 rounded">
+              {/* <span className="absolute top-2 right-2 bg-black bg-opacity-70 text-white text-xs px-2 py-0.5 rounded">
                 {formatTime(short.watchTime)==="0s"?"1s":formatTime(short.watchTime)}
-              </span>
+              </span> */}
             </div>
             <div className="p-2">
               <h3 className="text-sm font-semibold text-white line-clamp-2">

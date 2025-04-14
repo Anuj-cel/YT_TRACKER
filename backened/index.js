@@ -153,7 +153,7 @@ app.post('/watchtime', async (req, res) => {
 
     const month = currentDate.slice(0, 7);
 
-    await updateHourlyWatchTime(currentDate, realStartTime, realEndTime, duration);
+    await updateHourlyWatchTime(currentDate, realEndTime, duration);
     await updateWatchTime(currentDate, categoryName, duration, month);
 
     const updatedRecord = await CategoryWatchTime.findOne({ date: currentDate });
@@ -178,7 +178,9 @@ app.post('/watchtime', async (req, res) => {
 
 app.get("/watchhistory", async (req, res) => {
   try {
-    const watchHistory = await WatchHistory.find();
+    const currentDate=new Date().toISOString().split("T")[0];
+    console.log("This is currentDate from watchHistory ",currentDate)
+    const watchHistory = await WatchHistory.find({Date:currentDate});
     // console.log("This is watchHistory from index.js ", watchHistory)
     if (!watchHistory || watchHistory.length === 0) {
       return res.status(404).json({ message: "No watch history found" });
@@ -429,49 +431,36 @@ async function getCategoryData(videoId, isShorts) {
 
 
 
-async function updateHourlyWatchTime(currentDate, realStartTime, realEndTime, totalDuration) {
-  const start = new Date(realStartTime).toLocaleString();
-  const end = new Date(realEndTime).toLocaleString();
-console.log("This is start ",start)
-console.log("This is end ",end)
-  const totalDurationMs = end - start;
-
-  // 🔐 Safety checks
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-    console.warn("Invalid date(s) passed:", realStartTime, realEndTime);
-    return;
-  }
-
-  if (end < start || totalDurationMs <= 0 || totalDurationMs > 3 * 60 * 60 * 1000) {
-    console.warn("Abnormal duration detected:", totalDurationMs / 1000, "seconds");
-    return;
-  }
-
-  const startHour = start.getHours();
+async function updateHourlyWatchTime(currentDate, realEndTime, totalDuration) {
+  const end = new Date(realEndTime);
   const endHour = end.getHours();
 
-  for (let hour = startHour; hour <= endHour; hour++) {
-    const hourStart = new Date(start);
-    hourStart.setHours(hour, 0, 0, 0);
+  const durationInHours = totalDuration / 3600; // convert seconds to hours
+  const hoursToDistribute = Math.ceil(durationInHours);
 
-    const hourEnd = new Date(hourStart);
-    hourEnd.setHours(hour + 1);
+  let remainingDuration = totalDuration; // in seconds
 
-    const overlapStart = Math.max(start.getTime(), hourStart.getTime());
-    const overlapEnd = Math.min(end.getTime(), hourEnd.getTime());
-    const overlapDuration = Math.max(0, overlapEnd - overlapStart); // in ms
+  for (let i = 0; i < hoursToDistribute; i++) {
+    const hour = endHour - i;
+    let durationForHour;
 
-    if (overlapDuration > 0) {
-      const overlapSeconds = overlapDuration / 1000;
-
-      console.log(`⏱ Updating hour ${hour}: +${overlapSeconds.toFixed(2)} sec`);
-
-      await HourWatch.findOneAndUpdate(
-        { date: currentDate, hour },
-        { $inc: { duration: overlapSeconds } },
-        { upsert: true, new: true }
-      );
+    if (remainingDuration >= 3600) {
+      durationForHour = 3600; // 1 hour in seconds
+      remainingDuration -= 3600;
+    } else {
+      durationForHour = remainingDuration;
+      remainingDuration = 0;
     }
+
+    console.log(`⏱ Updating hour ${hour}: +${(durationForHour / 60).toFixed(2)} min`);
+
+    await HourWatch.findOneAndUpdate(
+      { date: currentDate, hour },
+      { $inc: { duration: durationForHour } },
+      { upsert: true, new: true }
+    );
+
+    if (remainingDuration === 0) break;
   }
 }
 
