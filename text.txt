@@ -329,10 +329,41 @@ console.log(sortedObjects);
 //   { name: 'John', age: 30 },
 //   { name: 'Bob', age: 40 }
 // ]
-
-PS D:\React\EXTENSIONS\TRACKER - Copy\backened> netstat -ano | findstr 3000 
+25.
+   PS D:\React\EXTENSIONS\TRACKER - Copy\backened> netstat -ano | findstr 3000 
   TCP    0.0.0.0:3000           0.0.0.0:0              LISTENING       20632
   TCP    127.0.0.1:3000         127.0.0.1:65375        TIME_WAIT       0
   TCP    127.0.0.1:3000         127.0.0.1:65376        TIME_WAIT       0
   TCP    [::]:3000              [::]:0                 LISTENING       20632
-PS D:\React\EXTENSIONS\TRACKER - Copy\backened> taskkill /F /PID 20632
+ PS D:\React\EXTENSIONS\TRACKER - Copy\backened> taskkill /F /PID 20632
+26.
+ difference bt .find and .filter in js
+In JavaScript, .find() and .filter() are both array methods used for searching through arrays, but they serve different purposes and return different results.
+.find()
+
+    Returns the first matching element that satisfies the provided condition.
+    If no element is found, it returns undefined.
+
+Example:
+Code
+
+const numbers = [1, 2, 3, 4, 5];
+const foundNumber = numbers.find(num => num > 3);
+console.log(foundNumber); // Output: 4
+
+.filter()
+
+    Returns a new array containing all elements that satisfy the provided condition.
+    If no elements are found, it returns an empty array [].
+
+Example:
+Code
+
+const numbers = [1, 2, 3, 4, 5];
+const filteredNumbers = numbers.filter(num => num > 3);
+console.log(filteredNumbers); // Output: [4, 5]
+
+ In summary:
+
+    Use .find() when you need to find a single element that matches a condition.
+    Use .filter() when you need to find multiple elements that match a condition.

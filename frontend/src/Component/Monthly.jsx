@@ -10,17 +10,48 @@ function Monthly() {
     const fetchData = async () => {
       try {
         const res = await axios.get("http://localhost:3000/watchTime/monthly");
-        console.log("this is data ",res.data)
-        setMonthlyData(res.data);
+        const merged = mergeSameDateEntries(res.data);
+        setMonthlyData(merged);
       } catch (err) {
         console.error("Failed to fetch monthly data", err);
       }
     };
     fetchData();
-    socket.on("monthlyDataUpdated",(newData)=>setMonthlyData(newData))
+
+    socket.on("monthlyDataUpdated", (newData) => {
+      const merged = mergeSameDateEntries(newData);
+      setMonthlyData(merged);
+    });
+
+    return () => {
+      socket.off("monthlyDataUpdated");
+    };
   }, []);
-//Wed Apr 02 2025
-const formatMonth = (dateString) => {
+
+  const mergeSameDateEntries = (data) => {
+    const mergedMap = {};
+
+    data.forEach(entry => {
+      const dateKey = entry.date;
+
+      if (!mergedMap[dateKey]) {
+        mergedMap[dateKey] = { ...entry, categories: [...entry.categories] };
+      } else {
+        entry.categories.forEach(cat => {
+          const existing = mergedMap[dateKey].categories.find(c => c.category === cat.category);
+          if (existing) {
+            existing.watchTime += cat.watchTime;
+          } else {
+            mergedMap[dateKey].categories.push({ ...cat });
+          }
+        });
+      }
+    });
+
+    return Object.values(mergedMap);
+  };
+
+  const formatMonth = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString('default', { month: 'long', day: 'numeric', year: 'numeric' });
   };
@@ -37,7 +68,6 @@ const formatMonth = (dateString) => {
         }}
       >
         {monthlyData.slice().reverse().map((monthItem, index) => (
-            
           <div 
             key={index}
             style={{
@@ -51,8 +81,6 @@ const formatMonth = (dateString) => {
             <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>
               {formatMonth(monthItem.date)}
             </h4>
-
-
 
             <div style={{ width: '180px', height: '180px', margin: '0 auto' }}>
               <PieGraph categories={monthItem.categories} />

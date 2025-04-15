@@ -18,6 +18,7 @@ const categoryWatchTimeSchema = new mongoose.Schema({
       type: Number,
       required: true,
     },
+    isShorts:{type:Boolean,default:false}
   }],
 });
 

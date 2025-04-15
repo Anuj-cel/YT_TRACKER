@@ -3,6 +3,7 @@ import axios from 'axios';
 import { PieGraph } from '../Charts/PieGraph';
 import "../App.css";
 import socket from '../socket';
+
 function Weekly() {
   const [weekly, setWeekly] = useState([]);
 
@@ -10,14 +11,51 @@ function Weekly() {
     const fetchData = async () => {
       try {
         const res = await axios.get("http://localhost:3000/watchTime/weekly");
-        setWeekly(res.data);
+        const mergedData = mergeByDate(res.data);
+        setWeekly(mergedData);
       } catch (err) {
         console.log(err);
       }
     };
+
     fetchData();
-    socket.on("weeklyDataUpdated",(newData)=>setWeekly(newData))
+
+    socket.on("weeklyDataUpdated", (newData) => {
+      const mergedData = mergeByDate(newData);
+      setWeekly(mergedData);
+    });
+
+    return () => {
+      socket.off("weeklyDataUpdated");
+    };
   }, []);
+
+  // Helper to merge all entries with same date
+  const mergeByDate = (data) => {
+    const map = {};
+
+    data.forEach((entry) => {
+      const date = entry.date;
+
+      if (!map[date]) {
+        map[date] = {
+          date: date,
+          categories: [...entry.categories]
+        };
+      } else {
+        entry.categories.forEach((cat) => {
+          const existing = map[date].categories.find(c => c.category === cat.category);
+          if (existing) {
+            existing.watchTime += cat.watchTime;
+          } else {
+            map[date].categories.push({ ...cat });
+          }
+        });
+      }
+    });
+
+    return Object.values(map);
+  };
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">

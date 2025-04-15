@@ -17,7 +17,8 @@ async function getReactPort() {
 }
 
 function formatTime(seconds) {
-    if(seconds===NaN)
+    console.log("This is seconds from popup ",seconds);
+    if(seconds===NaN|| seconds===undefined)
         seconds=0;
     let hrs = Math.floor(seconds / 3600);
     let mins = Math.floor((seconds % 3600) / 60);

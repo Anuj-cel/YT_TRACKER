@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { PieGraph } from "../Charts/PieGraph";
-import { useState, useEffect } from 'react';
 import "../App.css";
 import socket from '../socket';
 import formatTime from '../utils/formatTime';
@@ -9,94 +8,72 @@ function Home() {
     const [watchTime, setWatchTime] = useState({
         totalWatchTime: 0,
         totalShorts: 0,
-        record: { categories: [] }
+        records: []
     });
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const res = await fetch("http://localhost:3000/watchtime");
-    //             console.log("API response:", res);
-    //             console.log("This is response ", res);
-    //             if (!res.ok) {
-    //                 throw new Error("No Data Found");
-    //             }
-    //             const data = await res.json();
-    //             setWatchTime(data);
-    //             console.log("This is from dashboard ", data);
-    //         } catch (error) {
-    //             setError(error);
-    //             console.error("Error fetching watch time:", error);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-    //     fetchData();
-    //     // ✅ Listen to socket updates
-    //     socket.on("watchTimeDataUpdated", (newData) => {
-    //         console.log("Socket update received", newData);
-    //         setWatchTime(newData);
-    //     });
+    // Get today's date in YYYY-MM-DD format
+    const today = new Date().toISOString().split("T")[0];
 
-    //     // ✅ Clean up listener when component unmounts
-    //     return () => {
-    //         console.log("Umounted");
-    //         socket.off("watchTimeDataUpdated");
-    //     };
-    // }, []);
     useEffect(() => {
-        // const fetchData = async () => {
-        //     try {
-        //         const res = await fetch("http://localhost:3000/watchtime");
-        //         if (!res.ok) throw new Error("No Data Found");
-        //         const data = await res.json();
-        //         setWatchTime(data);
-        //         console.log("Fetched from API", data);
-        //     } catch (error) {
-        //         setError(error.message);
-        //         console.error("Error fetching watch time:", error);
-        //     } finally {
-        //         setLoading(false);
-        //     }
-        // };
         const fetchData = async () => {
             try {
-              const res = await fetch("http://localhost:3000/watchtime");
-              if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(errorData.message);
-              }
-              const data = await res.json();
-              setWatchTime(data);
-              console.log("Fetched from API", data);
+                const res = await fetch("http://localhost:3000/watchtime");
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    throw new Error(errorData.message);
+                }
+                const data = await res.json();
+                setWatchTime(data);
+                console.log("Fetched from API", data);
             } catch (error) {
-              setError(error.message);
-              console.error("Error fetching watch time:", error);
+                setError(error.message);
+                console.error("Error fetching watch time:", error);
             } finally {
-              setLoading(false);
+                setLoading(false);
             }
-          };
+        };
+
         fetchData();
-    
-        // ✅ Add listener after fetch
+
         socket.on("watchTimeDataUpdated", (newData) => {
             console.log("Socket update received", newData);
             setWatchTime(newData);
         });
-    
-        // ✅ Clean up on unmount
+
         return () => {
             socket.off("watchTimeDataUpdated");
             console.log("Unmounted and listener removed");
         };
     }, []);
-    
 
+    // Filter all today's records
+    const todayRecords = watchTime.records.filter(r => r.date === today); 
+
+    // Merge all categories from today's records
+    const mergedCategories = {};
+    todayRecords.forEach(record => {
+        record.categories.forEach(cat => {
+            const key = `${cat.category}-${cat.isShorts}`; // Differentiate shorts and regular
+            if (!mergedCategories[key]) {
+                mergedCategories[key] = {
+                    category: cat.category,
+                    watchTime: 0,
+                    isShorts: cat.isShorts
+                };
+            }
+            mergedCategories[key].watchTime += cat.watchTime;
+        });
+    });
+
+    // Convert to array
+    const todayCategoryData = Object.values(mergedCategories);
+    console.log("Today's merged categories:", todayCategoryData);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p className="error-message">{error}</p>;
+
     return (
         <>
             <h1 className="dashboard-title">📊 YouTube Watch Time Dashboard</h1>
@@ -114,19 +91,23 @@ function Home() {
                         </div>
                     </div>
 
-                    {watchTime.record.categories.length > 0 ? (
-                        <PieGraph categories={watchTime.record.categories} />
+                    {todayCategoryData.length > 0 ? (
+                        <PieGraph categories={todayCategoryData} />
                     ) : (
-                        <p className="no-data">No category data available.</p>
+                        <p className="no-data">No category data available for today.</p>
                     )}
                 </>
             ) : (
-                <>
-                    <p>No Watch Time Data Available for Today.</p>
-                </>
+                <p>No Watch Time Data Available for Today.</p>
             )}
         </>
-    )
+    );
 }
 
-export default Home
+export default Home;
+
+
+//errors which i was doing 
+/**
+ * i was having a array of records of same date and i was using .find which was only giving the first element that met the today===record.date so i changed that to .fillter to get an array of objects then during sending to pie we should be sending a record with categories so we merged to have the all same categories to one either shorts or not and of all of same date
+ */
