@@ -1,17 +1,17 @@
 const mongoose=require("mongoose");
 const watchHistorySchema = new mongoose.Schema({
+  Date: Date,
     videoId: String,
     videoTitle: String,
     categoryId: Number,
     categoryName: String,
-    watchTime: Number,
+    thumbnail:String,
     channelTitle:String,
-    Date: Date,
+    watchTime: Number,
     isShorts:{
       type:Boolean,
       default:false
     },
-    thumbnail:String,
     createdAt: { type: Date, default: Date.now}
   });
 
