@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { PieGraph } from "../Charts/PieGraph";
-import "../App.css";
 import socket from '../socket';
 import formatTime from '../utils/formatTime';
+import PageWrapper from "../utils/PageWrapper";
 
 function Home() {
     const [watchTime, setWatchTime] = useState({
@@ -13,23 +13,21 @@ function Home() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Get today's date in YYYY-MM-DD format
     const today = new Date().toISOString().split("T")[0];
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const res = await fetch("http://localhost:3000/watchtime");
+                console.log("This is res ",res)
                 if (!res.ok) {
                     const errorData = await res.json();
                     throw new Error(errorData.message);
                 }
                 const data = await res.json();
                 setWatchTime(data);
-                console.log("Fetched from API", data);
             } catch (error) {
                 setError(error.message);
-                console.error("Error fetching watch time:", error);
             } finally {
                 setLoading(false);
             }
@@ -38,24 +36,20 @@ function Home() {
         fetchData();
 
         socket.on("watchTimeDataUpdated", (newData) => {
-            console.log("Socket update received", newData);
             setWatchTime(newData);
         });
 
         return () => {
             socket.off("watchTimeDataUpdated");
-            console.log("Unmounted and listener removed");
         };
     }, []);
 
-    // Filter all today's records
-    const todayRecords = watchTime.records.filter(r => r.date === today); 
+    const todayRecords = watchTime.records.filter(r => r.date === today);
 
-    // Merge all categories from today's records
     const mergedCategories = {};
     todayRecords.forEach(record => {
         record.categories.forEach(cat => {
-            const key = `${cat.category}-${cat.isShorts}`; // Differentiate shorts and regular
+            const key = `${cat.category}-${cat.isShorts}`;
             if (!mergedCategories[key]) {
                 mergedCategories[key] = {
                     category: cat.category,
@@ -67,47 +61,45 @@ function Home() {
         });
     });
 
-    // Convert to array
     const todayCategoryData = Object.values(mergedCategories);
-    console.log("Today's merged categories:", todayCategoryData);
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p className="error-message">{error}</p>;
+    if (loading) return <p className="text-white text-center py-10 text-lg">Loading...</p>;
+    if (error) return <p className="text-red-400 text-center py-10">{error}</p>;
 
     return (
+        <PageWrapper>
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white px-4 sm:px-6 lg:px-8 py-10">
+    <h1 className="text-3xl sm:text-4xl font-extrabold text-center mb-10 text-cyan-400 drop-shadow-md">
+        📊 YouTube Watch Time Dashboard
+    </h1>
+
+    {watchTime.totalWatchTime > 0 ? (
         <>
-            <h1 className="dashboard-title">📊 YouTube Watch Time Dashboard</h1>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-10">
+                <div className="bg-gray-800 border border-gray-700 text-gray-100 rounded-2xl shadow-xl p-6 w-full sm:w-1/2 max-w-xs text-center transition-transform hover:scale-105 duration-200">
+                    <h3 className="text-lg font-semibold mb-2 text-cyan-300">Total Video Time</h3>
+                    <p className="text-2xl font-bold">{formatTime(watchTime.totalWatchTime - watchTime.totalShorts)}</p>
+                </div>
+                <div className="bg-gray-800 border border-gray-700 text-gray-100 rounded-2xl shadow-xl p-6 w-full sm:w-1/2 max-w-xs text-center transition-transform hover:scale-105 duration-200">
+                    <h3 className="text-lg font-semibold mb-2 text-pink-300">Total Shorts Time</h3>
+                    <p className="text-2xl font-bold">{formatTime(watchTime.totalShorts)}</p>
+                </div>
+            </div>
 
-            {watchTime.totalWatchTime > 0 ? (
-                <>
-                    <div className="watch-summary">
-                        <div className="watch-card">
-                            <h3>Total Video Time</h3>
-                            <p>{formatTime(watchTime.totalWatchTime - watchTime.totalShorts)}</p>
-                        </div>
-                        <div className="watch-card">
-                            <h3>Total Shorts Time</h3>
-                            <p>{formatTime(watchTime.totalShorts)}</p>
-                        </div>
-                    </div>
-
-                    {todayCategoryData.length > 0 ? (
-                        <PieGraph categories={todayCategoryData} />
-                    ) : (
-                        <p className="no-data">No category data available for today.</p>
-                    )}
-                </>
+            {todayCategoryData.length > 0 ? (
+                <div className="max-w-3xl mx-auto bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-6 style=height: 434px;overflow:hidden;">
+                    <PieGraph categories={todayCategoryData} />
+                </div>
             ) : (
-                <p>No Watch Time Data Available for Today.</p>
+                <p className="text-center text-gray-400">No category data available for today.</p>
             )}
         </>
+    ) : (
+        <p className="text-center text-gray-400">No Watch Time Data Available for Today.</p>
+    )}
+</div>
+</PageWrapper>
     );
 }
 
 export default Home;
-
-
-//errors which i was doing 
-/**
- * i was having a array of records of same date and i was using .find which was only giving the first element that met the today===record.date so i changed that to .fillter to get an array of objects then during sending to pie we should be sending a record with categories so we merged to have the all same categories to one either shorts or not and of all of same date
- */

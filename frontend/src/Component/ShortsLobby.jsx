@@ -23,10 +23,10 @@ function ShortsLobby({ shorts, setWatchHistory }) {
 
   return (
     <div className="mb-10 px-4">
-      <h2 className="text-2xl font-bold text-gray-800">Shorts</h2>
+      <h2 className="text-2xl font-bold text-white mb-2">Shorts</h2>
 
       <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2">
-        {shorts.slice().reverse().map((short) => (
+        {shorts.slice().reverse().map((short) => short.videoId==undefined?null:(
           <div
             key={short.id}
             className="relative min-w-[180px] max-w-[180px] flex-shrink-0 bg-zinc-900 rounded-lg shadow-lg hover:scale-105 transition-transform"

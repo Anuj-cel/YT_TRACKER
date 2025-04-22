@@ -13,7 +13,7 @@ async function getReactPort() {
             continue; // Try next port if fetch fails
         }
     }
-    return null; // No React frontend found
+    return null;
 }
 
 function formatTime(seconds) {
@@ -41,9 +41,8 @@ function updateDisplay(watchTime, shortsTime) {
     document.getElementById("totalTime").textContent = formatTime(watchTime + shortsTime);
 }
 
-// Example Usage (Replace this with actual watch time values)
-let exampleWatchTime = 7500; // 7500 sec = 2 hr 5 min
-let exampleShortsTime = 180; // 180 sec = 3 min
+let exampleWatchTime = 7500;
+let exampleShortsTime = 180; 
 
 updateDisplay(exampleWatchTime, exampleShortsTime);
 
@@ -54,8 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const shortsTimeDisplay = document.getElementById("shortsTime");
     const totalTimeDisplay = document.getElementById("totalTime");
 
-    // Fetch watch time from the backend
-    fetch("http://localhost:3000/watchtime") // Change port if needed
+    fetch("http://localhost:3000/watchtime") 
         .then(response => response.json())
         .then(data => {
             console.log("This is data in popup 0 ",data);
@@ -63,19 +61,15 @@ document.addEventListener("DOMContentLoaded", () => {
             watchTimeDisplay.textContent = formatTime(data.totalWatchTime-data.totalShorts)||'0s';
             shortsTimeDisplay.textContent = formatTime(data.totalShorts)||"0s";
         })
-        .catch(error => console.error("❌ Error fetching watch time:", error));
+        .catch(error => console.error(" Error fetching watch time:", error));
 });
 
 document.getElementById("dashboard-btn").addEventListener("click", () => {
     console.log("Request for data is done ");
-    chrome.tabs.create({ url: " http://localhost:5173/" }); // Change this URL later if deployed
+    chrome.tabs.create({ url: " http://localhost:5173/" }); 
 });
 
 
 
 
-// Why This Works?
 
-//     Backend servers (Express, Node.js, etc.) won’t serve manifest.json, but React/Vite will.
-
-//     It ensures only the React frontend is detected, avoiding confusion with backend servers.

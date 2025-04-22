@@ -3,6 +3,7 @@ import axios from 'axios';
 import { PieGraph } from '../Charts/PieGraph';
 import "../App.css";
 import socket from '../socket';
+import PageWrapper from "../utils/PageWrapper";
 
 function Weekly() {
   const [weekly, setWeekly] = useState([]);
@@ -58,8 +59,9 @@ function Weekly() {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h2 className="text-3xl font-bold text-center mb-10 text-gray-800">
+    <PageWrapper>
+    <div className="p-6 bg-gray-900 min-h-screen text-white">
+      <h2 className="text-3xl font-bold text-center mb-10 text-cyan-400">
         📅 Weekly Category Watch Time
       </h2>
 
@@ -69,9 +71,9 @@ function Weekly() {
           return (
             <div
               key={index}
-              className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center"
+              className="bg-gray-800 rounded-xl shadow-md p-6 flex flex-col items-center justify-center hover:shadow-lg transition-shadow duration-200"
             >
-              <h4 className="text-lg font-semibold text-gray-700 mb-4">
+              <h4 className="text-lg font-semibold text-gray-300 mb-4">
                 {formattedDate}
               </h4>
               <div className="w-44 h-44">
@@ -82,6 +84,7 @@ function Weekly() {
         })}
       </div>
     </div>
+    </PageWrapper>
   );
 }
 

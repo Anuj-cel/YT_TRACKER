@@ -1,7 +1,10 @@
+
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { PieGraph } from '../Charts/PieGraph';
 import socket from '../socket';
+import PageWrapper from "../utils/PageWrapper";
+import '../App.css'
 
 function Monthly() {
   const [monthlyData, setMonthlyData] = useState([]);
@@ -57,38 +60,30 @@ function Monthly() {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2 style={{ marginBottom: '20px', textAlign: 'center' }}>📆 Monthly Category Watch Time</h2>
+    <PageWrapper>
+    <div className="min-h-screen bg-gray-900 text-white p-6">
+      <h2 className="text-3xl font-bold text-center mb-10 text-cyan-400">📆 Monthly Category Watch Time</h2>
 
       <div 
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))',
-          gap: '20px',
-        }}
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
       >
         {monthlyData.slice().reverse().map((monthItem, index) => (
           <div 
             key={index}
-            style={{
-              backgroundColor: '#ffffff',
-              padding: '12px',
-              borderRadius: '12px',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-              textAlign: 'center'
-            }}
+            className="bg-gray-800 rounded-xl shadow-md p-6 flex flex-col items-center justify-center hover:shadow-lg transition-shadow duration-200"
           >
-            <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '10px' }}>
+            <h4 className="text-lg font-semibold text-gray-300 mb-4">
               {formatMonth(monthItem.date)}
             </h4>
 
-            <div style={{ width: '180px', height: '180px', margin: '0 auto' }}>
+            <div className="w-44 h-44">
               <PieGraph categories={monthItem.categories} />
             </div>
           </div>
         ))}
       </div>
     </div>
+    </PageWrapper>
   );
 }
 

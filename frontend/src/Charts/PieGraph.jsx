@@ -22,7 +22,7 @@ export const PieGraph = ({ categories }) => {
       legend: {
         position: "bottom",
         labels: {
-          color: "#374151", // Tailwind's gray-700
+          color: "#6B7280", // Updated to a slightly darker gray
           font: {
             size: 14,
             family: "Inter, sans-serif",
@@ -41,8 +41,6 @@ export const PieGraph = ({ categories }) => {
       },
     },
   };
-
- 
 
   useEffect(() => {
     const labels = categories.map((cat) => cat.category);
@@ -73,16 +71,15 @@ export const PieGraph = ({ categories }) => {
 
   return (
     <div className="w-full">
-      <h3 className="text-center text-sm text-gray-500 mb-2">
+      <h3 className="text-center text-sm text-gray-600 mb-2">
         Total:{" "}
-        <span className="text-blue-500 font-semibold">{formatTime(totalTime)}</span>
+        <span className="text-blue-600 font-semibold">{formatTime(totalTime)}</span>
       </h3>
       <div className="flex justify-center">
-  <div className="max-w-sm w-full">
-    <Pie data={chartData} options={options} />
-  </div>
-</div>
-
+        <div className="max-w-sm w-full">
+          <Pie data={chartData} options={options} />
+        </div>
+      </div>
     </div>
   );
 };

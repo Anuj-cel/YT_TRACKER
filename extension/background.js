@@ -1,4 +1,3 @@
-// Event listener for when the extension is installed or updated
 let activeTabId = null;
 chrome.runtime.onInstalled.addListener(() => {
     reinjectContentScript();
@@ -48,14 +47,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
                 isShorts: message.isShorts,
                 realStartTime:message.realStartTime,
                 realEndTime:message.realEndTime,
-                // ads:message.ads
-                // videoId: getYouTubeVideoId(message.videoUrl||sender.tab.url)-->this was making reponse undefined   ------->lesson
             })
         })
-            .then(response => response.text())  // Get raw response first
+            .then(response => response.text())  
             .then(data => {
                 try {
-                    let jsonData = JSON.parse(data);  // Try parsing JSON
+                    let jsonData = JSON.parse(data);  //parsing JSON
                     console.log('Successfully sent watch time to backend:', jsonData);
                 } catch (error) {
                     console.error('Error parsing JSON response:', error, 'Response:', data);
