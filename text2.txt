@@ -1,0 +1,74 @@
+1.
+       {items.map((item, index) => (
+        <li key={index}>{`${index + 1}. ${item}`}</li>
+      ))}
+2. 
+  erroe during running frontened
+  > frontend@0.0.0 dev D:\React\EXTENSIONS\TRACKER_FINAL\frontend
+ > vite
+
+ node:internal/modules/esm/resolve:854
+  throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);
+        ^
+
+ Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'esbuild' imported from D:\React\EXTENSIONS\TRACKER_FINAL\frontend\node_modules\.pnpm\vite@6.2.3_jiti@2.4.2_lightningcss@1.29.2\node_modules\vite\dist\node\cli.js
+    at packageResolve (node:internal/modules/esm/resolve:854:9)
+    at moduleResolve (node:internal/modules/esm/resolve:927:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1157:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:383:12)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:352:25)
+    at ModuleLoader.getModuleJob (node:internal/modules/esm/loader:227:38)
+    at ModuleWrap.<anonymous> (node:internal/modules/esm/module_job:87:39)
+    at link (node:internal/modules/esm/module_job:86:36) {
+  code: 'ERR_MODULE_NOT_FOUND'
+ }
+
+ Node.js v20.13.1
+ ELIFECYCLE  Command failed with exit code 1.
+ PS D:\React\EXTENSIONS\TRACKER_FINAL\frontend>
+ The error message indicates that Node.js is unable to find the esbuild package, which is a dependency of Vite.
+ To fix this issue, you can try the following steps:
+
+    Delete the node_modules directory:
+
+
+    Delete the pnpm-lock.yaml file:
+
+    Run the following command to reinstall the dependencies:
+
+
+ pnpm install
+
+    Try running the development server again:
+
+
+
+pnpm run dev
+3.
+ Press the Windows key + . (dot) to open the emoji keyboard.
+
+ 4.
+  The main difference between Link and NavLink is that NavLink provides an active class that can be used to style the link when it is active, whereas Link does not have this feature.
+5.
+   i was making module.exports to many functions becoz of that getId is not a function was coming
+
+6.
+ i was using app.get("watchtime",watchTime);
+ app.post("watchtime",watchTime); but i have to use .use
+7.
+ io.emit is not defined 
+ circular dependency as the file needed io and io is in index and io was passed before initialized and index need that file functions so giving error
+ for that we sent io as argument as i is passed after the index is initialized 
+ passing to import  app.use('/watchtime',watchTimeRouter(io) );
+ it is returning callback that is router 
+ module.exports=(io)=>{
+   return router
+ }
+  
+   const {updateHourlyWatchTime,updateWatchHistory,updateWatchTime}=require("../utils/updateWatchTimeFunctions")(io)
+8.
+ // Why This Works?
+
+//     Backend servers (Express, Node.js, etc.) won’t serve manifest.json, but React/Vite will.
+
+//     It ensures only the React frontend is detected, avoiding confusion with backend servers.
