@@ -1,4 +1,7 @@
 {
+	"engines": {
+  "node": "v20.13.1"
+},
 	"dependencies": {
 		"cors": "^2.8.5",
 		"dotenv": "^16.5.0",
@@ -7,9 +10,8 @@
 		"socket.io": "^4.8.1"
 	},
 	"scripts": {
-		"start": "nodemon index.js",
-		"dev": "nodemon backend/index.js",
+		"start": "node backend/index.js",
+		"dev": "node backend/index.js",
 		"build": "pnpm install --prefix frontend && pnpm --filter ./frontend run build"
-
 	}
 }
