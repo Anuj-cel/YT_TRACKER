@@ -12,6 +12,7 @@ function Weekly() {
     const fetchData = async () => {
       try {
         const res = await axios.get("http://localhost:3000/watchTime/weekly");
+        console.log("This is from weekly ",res)
         const mergedData = mergeByDate(res.data);
         setWeekly(mergedData);
       } catch (err) {
@@ -64,9 +65,9 @@ function Weekly() {
       <h2 className="text-3xl font-bold text-center mb-10 text-cyan-400">
         📅 Weekly Category Watch Time
       </h2>
-
+{console.log("This is from weekly ",weekly)}
       <div className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {weekly.map((data, index) => {
+        {weekly.length>0?weekly.map((data, index) => {
           const formattedDate = new Date(data.date).toDateString();
           return (
             <div
@@ -81,7 +82,9 @@ function Weekly() {
               </div>
             </div>
           );
-        })}
+        }):(
+                <p className="text-center text-gray-400">No weekly data available.</p>
+            )}
       </div>
     </div>
     </PageWrapper>

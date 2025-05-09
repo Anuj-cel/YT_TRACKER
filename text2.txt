@@ -67,8 +67,24 @@ pnpm run dev
   
    const {updateHourlyWatchTime,updateWatchHistory,updateWatchTime}=require("../utils/updateWatchTimeFunctions")(io)
 8.
- // Why This Works?
+  // Why This Works?
 
-//     Backend servers (Express, Node.js, etc.) won’t serve manifest.json, but React/Vite will.
+  //     Backend servers (Express, Node.js, etc.) won’t serve manifest.json, but React/Vite will.
 
-//     It ensures only the React frontend is detected, avoiding confusion with backend servers.
+ //     It ensures only the React frontend is detected, avoiding confusion with backend servers.
+
+9.
+ during serving frontend with backend
+
+ throw new TypeError(Missing parameter name at ${i}: ${DEBUG_URL}); ^ TypeError: Missing 
+
+  Change the fallback router from
+
+  app.all('*', (req, res, next) => {})
+
+  to
+
+  app.all('/{*any}', (req, res, next) => {})
+10. 
+  nodemon not allowed in render but node
+  

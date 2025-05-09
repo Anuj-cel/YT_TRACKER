@@ -6,11 +6,10 @@ const port = 3000;
 const mongoose = require('mongoose');
 const path=require("path")//1
 const directory_name=path.resolve();//2
-
-const WatchHistory=require("./Models/watchHistory")
 const watchTimeRouter = require("./Routes/watchTimeRouter")
 const watchHistoryRouter = require("./Routes/watchHistoryRouter")
 const dbUrl = process.env.dbUrl;
+console.log("This is dburl ",dbUrl);
 const cors = require('cors');
 const { Server } = require("socket.io")
 const server = http.createServer(app);
