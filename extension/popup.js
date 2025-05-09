@@ -1,16 +1,13 @@
-
-
-
 const POSSIBLE_PORTS = [5173, 3001, 5174, 5175, 3000]; 
 async function getReactPort() {
     for (const port of POSSIBLE_PORTS) {
         try {
-            // Fetch `manifest.json`, which React/Vite always serves
+            
             const response = await fetch(`http://localhost:${port}/manifest.json`, { mode: "no-cors" });
             console.log(`React dev server found on port: ${port}`);
-            return port; // Return the first successful port
+            return port; 
         } catch (error) {
-            continue; // Try next port if fetch fails
+            continue; 
         }
     }
     return null;

@@ -6,7 +6,7 @@ const categoryWatchTimeSchema = new mongoose.Schema({
     required: true,
   },
   month: {
-    type: String, // e.g., "2025-03"
+    type: String, 
     required: true,
   },
   categories: [{

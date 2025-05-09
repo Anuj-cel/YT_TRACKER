@@ -31,7 +31,7 @@ function Weekly() {
     };
   }, []);
 
-  // Helper to merge all entries with same date
+  
   const mergeByDate = (data) => {
     const map = {};
 

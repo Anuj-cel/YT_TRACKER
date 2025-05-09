@@ -1,4 +1,4 @@
-// src/utils/ConfirmPopup.jsx
+
 import React from 'react';
 
 function ConfirmPopup({ onConfirm, onCancel, position = '' }) {

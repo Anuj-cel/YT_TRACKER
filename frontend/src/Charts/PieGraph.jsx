@@ -22,7 +22,7 @@ export const PieGraph = ({ categories }) => {
       legend: {
         position: "bottom",
         labels: {
-          color: "#6B7280", // Updated to a slightly darker gray
+          color: "#6B7280", 
           font: {
             size: 14,
             family: "Inter, sans-serif",
@@ -77,6 +77,7 @@ export const PieGraph = ({ categories }) => {
       </h3>
       <div className="flex justify-center">
         <div className="max-w-sm w-full">
+          {console.log("This is home DATA ",chartData)}
           <Pie data={chartData} options={options} />
         </div>
       </div>

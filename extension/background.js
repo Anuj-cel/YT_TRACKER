@@ -3,7 +3,6 @@ chrome.runtime.onInstalled.addListener(() => {
     reinjectContentScript();
 });
 
-// Reinjection function to inject the content script into all active YouTube tabs
 function reinjectContentScript() {
     chrome.tabs.query({}, function (tabs) {
         tabs.forEach(tab => {
@@ -21,11 +20,9 @@ function reinjectContentScript() {
     });
 }
 
-// Listen for messages from the content script (or popup)
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === "VIDEO_PLAYING") {
-        activeTabId = sender.tab.id; // Update active tab
-        console.log(`Tracking video on tab ${activeTabId}`);
+        activeTabId = sender.tab.id; 
     }
     console.log("Message received in background:", message);
     if (message && message.action === 'sendWatchTime') {
@@ -34,15 +31,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             activeTabId = null;
         }
         console.log(`Watch time received: ${message.duration} sec (Shorts: ${message.isShorts}) StartTime ${message.startTime} EndTime ${message.endTime}`);
-        console.log("This is tabId ", message.tabId);
-        // Send data to backend
         fetch('http://localhost:3000/watchtime', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                videoUrl: message.videoUrl || sender.tab.url,  // Ensure video URL is sent
+                videoUrl: message.videoUrl || sender.tab.url,  
                 duration: message.duration,
                 isShorts: message.isShorts,
                 realStartTime:message.realStartTime,

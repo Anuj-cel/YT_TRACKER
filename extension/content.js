@@ -1,4 +1,3 @@
-
 let startTime = 0;
 let videoElement = null;
 let currentVideoUrl = null;
@@ -20,10 +19,9 @@ function startTracking() {
         videoElement.addEventListener('ended', stopTracking);
 
         videoElement.addEventListener('play', () => {
-            startTime = performance.now();  // Reset start time
+            startTime = performance.now(); 
             currentVideoUrl = window.location.href;
             chrome.runtime.sendMessage({ action: "VIDEO_PLAYING" }, function (response) {
-                console.log("successfully sent tabId", response);
             })
             console.log("Video resumed, restarting tracking! , tabId ", chrome.runtime.id, "  ", currentVideoUrl);
 
@@ -31,14 +29,14 @@ function startTracking() {
     }
 }
 
-// Function to stop tracking when the video is paused, ended, or visibility changes
+
 function stopTracking() {
     console.log('stopTracking called and startTime is ', startTime);
 
     if (startTime !== null && videoElement) {
         let endTime = performance.now();
         realEndTime = new Date().getTime();
-        let sessionTime = Math.max(0, (endTime - startTime) / 1000); // Convert ms to sec
+        let sessionTime = Math.max(0, (endTime - startTime) / 1000); 
 
         console.log(`Stopped watching: ${currentVideoUrl}`);
         console.log(`Watched for ${sessionTime.toFixed(2)} sec`);

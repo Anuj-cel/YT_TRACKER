@@ -1,12 +1,13 @@
+
 const express=require("express")
 const router=express.Router();
-
 const CategoryWatchTime=require("../Models/DateWise")
 const WatchHistory = require("../Models/watchHistory")
 const HourWatch = require("../Models/Hourly")
 const {getVideoId,getCategoryData,getCategoryName}=require("../utils/categoryFunctions.js")
 
 module.exports=(io)=>{
+
   const {updateHourlyWatchTime,updateWatchHistory,updateWatchTime}=require("../utils/updateWatchTimeFunctions")(io)
 
 router.post("/",async (req, res) => {
@@ -23,9 +24,9 @@ router.post("/",async (req, res) => {
   
      
       const videoId = await getVideoId(videoUrl);
-  
-      if (!isShorts) totalWatchTime += duration;
-      else totalShorts += duration;
+      // totalWatchTime += duration;
+      // if (isShorts) 
+      //  totalShorts += duration;
   
       let videoData = await getCategoryData(videoId, isShorts);
      

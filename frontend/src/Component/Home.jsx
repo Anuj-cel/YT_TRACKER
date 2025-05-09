@@ -19,13 +19,14 @@ function Home() {
         const fetchData = async () => {
             try {
                 const res = await fetch("http://localhost:3000/watchtime");
-                console.log("This is res ",res)
                 if (!res.ok) {
                     const errorData = await res.json();
                     throw new Error(errorData.message);
                 }
                 const data = await res.json();
+                console.log("This is OldData ",data)
                 setWatchTime(data);
+               
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -37,6 +38,7 @@ function Home() {
 
         socket.on("watchTimeDataUpdated", (newData) => {
             setWatchTime(newData);
+            console.log("This is NewData ",newData)
         });
 
         return () => {
@@ -49,12 +51,11 @@ function Home() {
     const mergedCategories = {};
     todayRecords.forEach(record => {
         record.categories.forEach(cat => {
-            const key = `${cat.category}-${cat.isShorts}`;
+            const key = cat.category; // Changed key to just category
             if (!mergedCategories[key]) {
                 mergedCategories[key] = {
                     category: cat.category,
                     watchTime: 0,
-                    isShorts: cat.isShorts
                 };
             }
             mergedCategories[key].watchTime += cat.watchTime;
@@ -78,7 +79,7 @@ function Home() {
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-10">
                 <div className="bg-gray-800 border border-gray-700 text-gray-100 rounded-2xl shadow-xl p-6 w-full sm:w-1/2 max-w-xs text-center transition-transform hover:scale-105 duration-200">
                     <h3 className="text-lg font-semibold mb-2 text-cyan-300">Total Video Time</h3>
-                    <p className="text-2xl font-bold">{formatTime(watchTime.totalWatchTime - watchTime.totalShorts)}</p>
+                    <p className="text-2xl font-bold">{formatTime(Math.max(watchTime.totalWatchTime - watchTime.totalShorts))}</p>
                 </div>
                 <div className="bg-gray-800 border border-gray-700 text-gray-100 rounded-2xl shadow-xl p-6 w-full sm:w-1/2 max-w-xs text-center transition-transform hover:scale-105 duration-200">
                     <h3 className="text-lg font-semibold mb-2 text-pink-300">Total Shorts Time</h3>
@@ -88,6 +89,7 @@ function Home() {
 
             {todayCategoryData.length > 0 ? (
                 <div className="max-w-3xl mx-auto bg-gray-800 border border-gray-700 rounded-xl shadow-lg p-6 style=height: 434px;overflow:hidden;">
+                    {console.log("This is home not pie Data ",todayCategoryData)}
                     <PieGraph categories={todayCategoryData} />
                 </div>
             ) : (

@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "YouTube Watch Time Tracker",
+  "name": "YT_Tracker",
   "version": "1.0",
-  "description": "Tracks YouTube watch time and sends it to the backend",
+  "description": "Tracks YouTube",
   "permissions": [
     "tabs",
     "activeTab",

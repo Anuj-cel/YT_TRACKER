@@ -5,19 +5,15 @@ const HourWatch = require("../Models/Hourly")
 module.exports=(io)=>{
 async function updateWatchTime(currentDate, categoryName, duration, month, isShorts) {
     try {
-      // Find existing document for the given date, month, and isShorts
       let watchTimeDoc = await CategoryWatchTime.findOne({ date: currentDate, month, isShorts });
    if (watchTimeDoc) {
-        // Check if the category already exists
         const existingCategory = watchTimeDoc.categories.find(
           cat => cat.category === categoryName
         );
   
         if (existingCategory) {
-          // If category exists, update the watch time
           existingCategory.watchTime += duration;
         } else {
-          // If category doesn't exist, add a new category
           watchTimeDoc.categories.push({
             category: categoryName,
             watchTime: duration,
@@ -28,10 +24,10 @@ async function updateWatchTime(currentDate, categoryName, duration, month, isSho
   
         // Save updated document
         await watchTimeDoc.save();
+        // io.emit('watchTimeDataUpdated', watchTimeDoc);
         console.log(" Document saved in watchHistory :", watchTimeDoc);
   
       } else {
-        // Create new document if not found
         const newWatchTimeDoc = new CategoryWatchTime({
           date: currentDate,
           month: month,
@@ -44,6 +40,7 @@ async function updateWatchTime(currentDate, categoryName, duration, month, isSho
         });
   
         await newWatchTimeDoc.save();
+        // io.emit('watchTimeDataUpdated', newWatchTimeDoc);
       }
   
     } catch (error) {

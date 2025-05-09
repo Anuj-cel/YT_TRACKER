@@ -1,4 +1,4 @@
-// components/PageWrapper.js
+
 import { motion } from "framer-motion";
 
 const PageWrapper = ({ children }) => (

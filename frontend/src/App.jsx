@@ -45,7 +45,6 @@ const App = () => {
               <Route path="/weekly" element={<Weekly />} />
               <Route path="/hourly" element={<Hourly />} />
               <Route path="/monthly" element={<Monthly />} />
-              <Route path="/limiter" element={<Limiter />} />
               <Route path="/watchHistory" element={<WatchHistory />} />
             </Routes>
           </AnimatePresence>
