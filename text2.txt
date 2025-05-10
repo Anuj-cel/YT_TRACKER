@@ -88,3 +88,6 @@ pnpm run dev
 10. 
   nodemon not allowed in render but node
   
+11 
+  i was getting error during deployment that dotenv is not installed i solve it by adding
+  "build": "pnpm install && pnpm install --prefix frontend && pnpm --filter ./frontend run build"

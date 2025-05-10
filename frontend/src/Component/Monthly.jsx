@@ -11,7 +11,7 @@ function Monthly() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/watchTime/monthly");
+        const res = await axios.get("https://yt-tracker.onrender.com/watchTime/monthly");
         const merged = mergeSameDateEntries(res.data);
         setMonthlyData(merged);
       } catch (err) {

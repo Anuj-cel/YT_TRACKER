@@ -18,7 +18,7 @@ function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:3000/watchtime");
+                const res = await fetch("https://yt-tracker.onrender.com/watchtime");
                 if (!res.ok) {
                     const errorData = await res.json();
                     throw new Error(errorData.message);

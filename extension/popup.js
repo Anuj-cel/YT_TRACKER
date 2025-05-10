@@ -3,7 +3,7 @@ async function getReactPort() {
     for (const port of POSSIBLE_PORTS) {
         try {
             
-            const response = await fetch(`http://localhost:${port}/manifest.json`, { mode: "no-cors" });
+            const response = await fetch(`https://yt-tracker.onrender.com/manifest.json`, { mode: "no-cors" });
             console.log(`React dev server found on port: ${port}`);
             return port; 
         } catch (error) {
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const shortsTimeDisplay = document.getElementById("shortsTime");
     const totalTimeDisplay = document.getElementById("totalTime");
 
-    fetch("http://localhost:3000/watchtime") 
+    fetch("https://yt-tracker.onrender.com/watchtime") 
         .then(response => response.json())
         .then(data => {
             console.log("This is data in popup 0 ",data);
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.getElementById("dashboard-btn").addEventListener("click", () => {
     console.log("Request for data is done ");
-    chrome.tabs.create({ url: " http://localhost:5173/" }); 
+    chrome.tabs.create({ url: "https://yt-tracker.onrender.com" }); 
 });
 
 

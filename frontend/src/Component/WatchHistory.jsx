@@ -16,7 +16,7 @@ function WatchHistory() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/watchhistory');
+        const response = await axios.get('https://yt-tracker.onrender.com/watchhistory');
         setWatchHistory(response.data);
         setLoading(false);
       } catch (error) {

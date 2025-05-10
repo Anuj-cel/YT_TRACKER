@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             activeTabId = null;
         }
         console.log(`Watch time received: ${message.duration} sec (Shorts: ${message.isShorts}) StartTime ${message.startTime} EndTime ${message.endTime}`);
-        fetch('http://localhost:3000/watchtime', {
+        fetch('https://yt-tracker.onrender.com/watchtime', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
