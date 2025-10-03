@@ -21,7 +21,7 @@ function WatchHistory() {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching watch history:", error);
-        setError("No data found ");
+        setError("No Data found for today!");
         setLoading(false);
       }
     };

@@ -12,6 +12,6 @@
 	"scripts": {
 		"start": "node backend/index.js",
 		"dev": "node backend/index.js",
-		"build": "pnpm install && pnpm install --prefix frontend && pnpm run build --prefix frontend"
+		"build": "pnpm install && pnpm install --prefix frontend && pnpm --filter ./frontend run build"
 	}
 }
