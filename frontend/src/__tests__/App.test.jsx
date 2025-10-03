@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import App from '../App';
 
@@ -7,7 +7,7 @@ vi.mock('../utils/formatTime', () => ({
 }));
 
 describe("Homepage", () => {
-  it("Homepage is testing", () => {
+  test("Homepage is testing", () => {
     render(<App />);
     const Heading = screen.getByText(/WatchTracker/i);
     expect(Heading).toBeInTheDocument();

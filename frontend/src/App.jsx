@@ -1,13 +1,19 @@
 import React from 'react';
+import { Suspense } from 'react';
+import { lazy } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { BrowserRouter as Router, Routes, Route, NavLink,Navigate } from 'react-router-dom';
-import Weekly from "./Component/Weekly";
-import Hourly from "./Component/Hourly";
 import Home from "./Component/Home";
-import Monthly from "./Component/Monthly";
-import WatchHistory from './Component/WatchHistory';
+// import Weekly from "./Component/Weekly";
+// import Hourly from "./Component/Hourly";
+// import Monthly from "./Component/Monthly";
+// import WatchHistory from './Component/WatchHistory';
 
 const App = () => {
+  const WatchHistory=lazy(()=>import('./Component/WatchHistory'));
+  const Monthly=lazy(()=>import('./Component/Monthly'));
+  const Hourly=lazy(()=>import('./Component/Hourly'));
+  const Weekly=lazy(()=>import('./Component/Weekly'));
   return (
     <Router>
       <div className="min-h-screen bg-gradient-to-br from-white via-[#f1f1f1] to-white text-[#4A4A4A]">
@@ -39,6 +45,7 @@ const App = () => {
         {/* Main Content */}
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <AnimatePresence mode="wait">
+            <Suspense fallback={<div className="text-center text-gray-400 mt-10">Loading...</div>}>
             <Routes>
               <Route path='/' element={<Navigate to="/homepage" replace/>}/>
               <Route path="/homepage" element={<Home />} />
@@ -47,6 +54,7 @@ const App = () => {
               <Route path="/monthly" element={<Monthly />} />
               <Route path="/watchHistory" element={<WatchHistory />} />
             </Routes>
+            </Suspense>
           </AnimatePresence>
         </main>
 
