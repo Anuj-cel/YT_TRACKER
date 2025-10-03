@@ -16,12 +16,12 @@ function WatchHistory() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://yt-tracker.onrender.com/watchhistory');
+        const response = await axios.get('http://localhost:3000/watchhistory');
         setWatchHistory(response.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching watch history:", error);
-        setError(error.message);
+        setError("No data found ");
         setLoading(false);
       }
     };
@@ -88,7 +88,7 @@ function WatchHistory() {
       {loading ? (
         <div className="text-center text-gray-400 mt-10">Loading...</div>
       ) : error ? (
-        <div className="text-center text-red-400 mt-10">Error: {error}</div>
+        <div className="text-center  mt-10"> {error}</div>
       ) : sortedHistory?.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           {sortedHistory.map((video, index) =>

@@ -13,7 +13,7 @@ const Hourly = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("https://yt-tracker.onrender.com/watchTime/hourly");
+        const response = await axios.get("http://localhost:3000/watchTime/hourly");
         if (response.status !== 200) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

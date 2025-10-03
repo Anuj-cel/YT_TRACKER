@@ -6,7 +6,7 @@ function ShortsLobby({ shorts, setWatchHistory }) {
 
   const handleDelete = async (videoId) => {
     try {
-      const response = await fetch(`https://yt-tracker.onrender.com/${videoId}`, {
+      const response = await fetch(`http://localhost:3000/watchhistory/${videoId}`, {
         method: 'DELETE',
       });
       if (response.ok) {

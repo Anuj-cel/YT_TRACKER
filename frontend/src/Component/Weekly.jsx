@@ -11,7 +11,7 @@ function Weekly() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("https://yt-tracker.onrender.com/watchTime/weekly");
+        const res = await axios.get("http://localhost:3000/watchTime/weekly");
         console.log("This is from weekly ",res)
         const mergedData = mergeByDate(res.data);
         setWeekly(mergedData);

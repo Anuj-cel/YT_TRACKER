@@ -1,7 +1,7 @@
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Tooltip, Legend, ArcElement } from "chart.js";
 import { useState, useEffect } from "react";
-import formatTime from "../utils/formatTime";
+import formatTime from "../utils/formatTime.js";
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
