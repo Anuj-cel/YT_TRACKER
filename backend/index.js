@@ -24,7 +24,7 @@ app.use(express.json());
 
 async function main() {
   try {
-    mongoose.connect("mongodb://127.0.0.1:27017/yt_category_manager")
+    mongoose.connect("mongodb+srv://AnujKumar:MuOQh2SzwJ8NMuXn@cluster0.yh3wqfi.mongodb.net/YT_TRACKER")
     console.log("Db Connected!");
   }
   catch (err) {
