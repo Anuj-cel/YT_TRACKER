@@ -1,11 +1,12 @@
 {
 	"engines": {
-  "node": "v20.13.1"
-},
+		"node": "v20.13.1"
+	},
 	"dependencies": {
 		"cors": "^2.8.5",
 		"dotenv": "^16.5.0",
 		"express": "^5.1.0",
+		"lucide-react": "^0.552.0",
 		"mongoose": "^8.13.1",
 		"socket.io": "^4.8.1"
 	},
