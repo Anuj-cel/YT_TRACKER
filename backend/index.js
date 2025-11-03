@@ -9,6 +9,7 @@ const directory_name=path.resolve();//2
 const watchTimeRouter = require("./Routes/watchTimeRouter")
 const watchHistoryRouter = require("./Routes/watchHistoryRouter")
 const dbUrl = process.env.dbUrl;
+// console.log("This is dirname ",process.env);
 console.log("This is dburl ",dbUrl);
 const cors = require('cors');
 const { Server } = require("socket.io")
@@ -23,7 +24,7 @@ app.use(express.json());
 
 async function main() {
   try {
-    mongoose.connect(dbUrl)
+    mongoose.connect("mongodb://127.0.0.1:27017/yt_category_manager")
     console.log("Db Connected!");
   }
   catch (err) {
